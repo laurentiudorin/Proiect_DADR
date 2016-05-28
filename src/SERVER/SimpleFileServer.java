@@ -9,7 +9,7 @@ import java.net.Socket;
 public class SimpleFileServer {
 
   public final static int SOCKET_PORT = 13267;  // you may change this
-  public final static String FILE_TO_SEND = "e:/Windows/desktop/Calculator1/Program.txt";  // you may change this
+  public final static String FILE_TO_SEND = "Calculator_Server/Program.txt";  // you may change this
 
   protected FileInputStream fis = null;
   protected static BufferedInputStream bis = null;
