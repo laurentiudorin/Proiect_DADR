@@ -1,0 +1,1 @@
+Acesta este un simplu fisier care va testa sa transmisia este realizata corect.
