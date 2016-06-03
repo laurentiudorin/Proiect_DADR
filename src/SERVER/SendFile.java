@@ -15,7 +15,7 @@ public class SendFile extends SimpleFileServer{
       fis = new FileInputStream(myFile);
       bis = new BufferedInputStream(fis);
       bis.read(mybytearray,0,mybytearray.length);
-      os = sock.getOutputStream();
+      os = sock_send.getOutputStream();
       System.out.println("Sending " + FILE_TO_SEND + "(" + mybytearray.length + " bytes)");
       os.write(mybytearray,0,mybytearray.length);
       os.flush();

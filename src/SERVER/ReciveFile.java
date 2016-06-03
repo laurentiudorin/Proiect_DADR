@@ -11,7 +11,7 @@ public class ReciveFile extends SimpleFileServer{
 	public void Reciving() throws IOException{
 	  // receive file
 	  byte [] mybytearray  = new byte [FILE_SIZE];
-	  InputStream is = sock.getInputStream();
+	  InputStream is = sock_recive.getInputStream();
 	  fos = new FileOutputStream(FILE_TO_RECEIVED);
 	  bos = new BufferedOutputStream(fos);
 	  bytesRead = is.read(mybytearray,0,mybytearray.length);

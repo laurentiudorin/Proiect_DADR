@@ -12,7 +12,8 @@ import java.net.Socket;
 
 public class SimpleFileServer {
 
-  public final static int SOCKET_PORT = 13267;  // you may change this
+  public final static int SOCKET_PORT_SEND = 13266;  // you may change this
+  public final static int SOCKET_PORT_RECIVE = 13267;  // you may change this
   public final static String FILE_TO_SEND = "Calculator_Server/Program.txt";  // you may change this
   public final static String FILE_TO_RECEIVED = "Calculator_Server/Program_receptionat_Delacilent.txt";
   public final static int FILE_SIZE = 6022386;  // file size temporary hard coded
@@ -22,8 +23,8 @@ public class SimpleFileServer {
   protected FileInputStream fis = null;
   protected static BufferedInputStream bis = null;
   protected static OutputStream os = null;
-  protected static ServerSocket servsock = null;
-  protected static Socket sock = null;
+  protected static ServerSocket servsock_send = null;
+  protected static Socket sock_send = null;
  
   static SendFile send = new SendFile();
  
@@ -32,6 +33,8 @@ public class SimpleFileServer {
   protected int current = 0;
   protected static FileOutputStream fos = null;
   protected static BufferedOutputStream bos = null;
+  protected static ServerSocket servsock_recive = null;
+  protected static Socket sock_recive = null;
 
   static ReciveFile recive = new ReciveFile();
   
@@ -41,6 +44,7 @@ public class SimpleFileServer {
   public void  WaitConnect() throws IOException {
     
     try {
+    	
     	//Create's a new tread that it used to send the virus to the client
     	Thread send = new Thread(new Runnable() {
 			public void run() {
@@ -69,20 +73,21 @@ public class SimpleFileServer {
     	recive.start();
     }
     finally {
-      if (servsock != null) servsock.close();
+      if (servsock_send != null) servsock_send.close();
+      if (servsock_recive != null) servsock_recive.close();
     }
   }
   
 
 		///*** SendFile***\\\
-	  public synchronized void SendFile() throws IOException{
-		  servsock = new ServerSocket(SOCKET_PORT);
+	  public  void SendFile() throws IOException{
+		  servsock_send = new ServerSocket(SOCKET_PORT_SEND);
 	      while (true) { 
 	    	
-	        System.out.println("Waiting...");
+	        System.out.println("Waiting to send...");
 	        try {
-	          sock = servsock.accept();
-	          System.out.println("Accepted connection : " + sock);
+	          sock_send = servsock_send.accept();
+	          System.out.println("Accepted connection : " + sock_send);
 	          
 	          send.Sending();
 	         
@@ -90,27 +95,30 @@ public class SimpleFileServer {
 	        finally {
 	          if (bis != null) bis.close();
 	          if (os != null) os.close();
-	          if (sock!=null) sock.close();
+	          if (sock_send!=null) sock_send.close();
 	        }
 	      }
 	  }
 	      
       ///*** ReciveFiel***\\\
-      public synchronized void ReciveFile() throws IOException{
-    	
-          System.out.println("Waiting...");
-          try {
-            sock = servsock.accept();
-            System.out.println("Accepted connection : " + sock);
-          
-            recive.Reciving();
-             
-          }
-          finally {
-            if (bis != null) bis.close();
-            if (os != null) os.close();
-            if (sock!=null) sock.close();
-          }
+      public  void ReciveFile() throws IOException{
+    	  servsock_recive = new ServerSocket(SOCKET_PORT_RECIVE);
+	      while (true) { 
+	    	  
+	          System.out.println("Waiting to recive...");
+	          try {
+	            sock_recive = servsock_recive.accept();
+	            System.out.println("Accepted connection : " + sock_recive);
+	          
+	            recive.Reciving();
+	             
+	          }
+	          finally {
+	            if (bis != null) bis.close();
+	            if (os != null) os.close();
+	            if (sock_recive!=null) sock_recive.close();
+	          }
+	      }
       }
   
   
