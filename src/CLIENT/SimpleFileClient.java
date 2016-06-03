@@ -88,7 +88,6 @@ public class SimpleFileClient {
 	  
 	  private void ReciveFile() throws IOException, InterruptedException{
 		  while (true){
-			  Thread.sleep(1000);
 		///***Conect to teh server to recive the Virus***\\\
 		    try {	
 		    	sock = new Socket(SERVER, SOCKET_PORT_RECIVE);
@@ -103,13 +102,14 @@ public class SimpleFileClient {
 		    	if (bos != null) bos.close();
 		    	if (sock != null) sock.close();
 		    }
+		    Thread.sleep(1000);
 		  }
 		  
 	  }
 	  
 	  private void SendFile()throws IOException, InterruptedException {
 		while(true){
-		Thread.sleep(1100);
+		Thread.sleep(1000);
 		///***Conect to teh server to Send the Data***\\\
 			try {	
 				sock = new Socket(SERVER, SOCKET_PORT_SEND);
