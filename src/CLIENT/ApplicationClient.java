@@ -7,8 +7,9 @@ public class ApplicationClient {
 	
 		SimpleFileClient client = new SimpleFileClient();
 		
+		while (true){
 		client.ConnectToServer();
-		
+		}
 		
 		
 	}
